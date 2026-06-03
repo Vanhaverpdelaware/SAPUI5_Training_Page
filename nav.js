@@ -161,6 +161,20 @@ function initSearch(root) {
     }
   });
 
+  // Press / to focus search
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement !== input) {
+      e.preventDefault();
+      input.focus();
+      input.select();
+    }
+    if (e.key === 'Escape' && document.activeElement === input) {
+      input.value = '';
+      input.dispatchEvent(new Event('input'));
+      input.blur();
+    }
+  });
+
   // Clear search on nav link click
   document.addEventListener('click', e => {
     if (e.target.closest('.search-result-item') || e.target.closest('.sidebar-link')) {
@@ -170,6 +184,105 @@ function initSearch(root) {
       navSections.forEach(s => s.style.display = '');
     }
   });
+}
+
+function initTOC() {
+  const body = document.querySelector('.content-body');
+  if (!body) return;
+
+  // Reading time
+  const text = body.innerText || '';
+  const words = text.trim().split(/\s+/).length;
+  const mins = Math.max(1, Math.round(words / 200));
+  const h1 = body.querySelector('h1');
+  if (h1) {
+    const rt = document.createElement('p');
+    rt.className = 'reading-time';
+    rt.innerHTML = `⏱ ${mins} min read`;
+    h1.insertAdjacentElement('afterend', rt);
+  }
+
+  // TOC from h2 headings
+  const headings = Array.from(body.querySelectorAll('h2'));
+  if (headings.length < 2) return;
+
+  headings.forEach((h, i) => {
+    if (!h.id) h.id = 'section-' + i;
+  });
+
+  const toc = document.createElement('div');
+  toc.className = 'toc-box';
+  toc.innerHTML = '<h4>On this page</h4><ul class="toc-list">' +
+    headings.map(h => `<li><a href="#${h.id}">${h.textContent}</a></li>`).join('') +
+    '</ul>';
+
+  const firstH2 = headings[0];
+  firstH2.parentNode.insertBefore(toc, firstH2);
+
+  // Active section on scroll
+  const tocLinks = toc.querySelectorAll('a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(a => a.classList.remove('toc-active'));
+        const active = toc.querySelector(`a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('toc-active');
+      }
+    });
+  }, { rootMargin: '-10% 0px -80% 0px' });
+
+  headings.forEach(h => observer.observe(h));
+}
+
+function initDarkMode() {
+  // Apply saved preference
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+
+  // Inject toggle button into header
+  const header = document.querySelector('.site-header');
+  if (!header || document.getElementById('dark-toggle')) return;
+
+  const btn = document.createElement('button');
+  btn.id = 'dark-toggle';
+  btn.className = 'dark-toggle';
+  btn.setAttribute('aria-label', 'Toggle dark mode');
+  const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+  btn.textContent = isDark() ? '☀ Light' : '☾ Dark';
+
+  btn.addEventListener('click', () => {
+    if (isDark()) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'light');
+      btn.textContent = '☾ Dark';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      btn.textContent = '☀ Light';
+    }
+  });
+
+  // Insert before the last nav item
+  const topNav = header.querySelector('.top-nav');
+  if (topNav) header.insertBefore(btn, topNav);
+  else header.appendChild(btn);
+}
+
+function initBackToTop() {
+  if (document.getElementById('back-to-top')) return;
+  const btn = document.createElement('button');
+  btn.id = 'back-to-top';
+  btn.className = 'back-to-top';
+  btn.setAttribute('aria-label', 'Back to top');
+  btn.innerHTML = '↑';
+  document.body.appendChild(btn);
+
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
+
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
 function initNav() {
@@ -209,6 +322,9 @@ function initNav() {
 
   initCopyButtons();
   initSearch(root);
+  initTOC();
+  initDarkMode();
+  initBackToTop();
 
   // Inject hamburger button + overlay for mobile
   if (!document.getElementById('hamburger-btn')) {
