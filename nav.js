@@ -72,6 +72,34 @@ function buildSidebar(currentPageId, root) {
     <div class="sidebar-footer">SAPUI5 &amp; TypeScript Training v1.0</div>`;
 }
 
+function initCopyButtons() {
+  document.querySelectorAll('pre').forEach(pre => {
+    if (pre.parentElement?.classList.contains('pre-wrapper')) return;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'pre-wrapper';
+    pre.parentNode.insertBefore(wrapper, pre);
+    wrapper.appendChild(pre);
+
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.setAttribute('aria-label', 'Copy code to clipboard');
+    wrapper.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code')?.innerText ?? pre.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+}
+
 function initNav() {
   // Inject Prism.js for syntax highlighting (runs once)
   if (!document.getElementById('prism-css')) {
@@ -98,6 +126,8 @@ function initNav() {
   const root = document.body.dataset.root || './';
   const currentPageId = document.body.dataset.page || '';
   mount.innerHTML = buildSidebar(currentPageId, root);
+
+  initCopyButtons();
 
   // Inject hamburger button + overlay for mobile
   if (!document.getElementById('hamburger-btn')) {
