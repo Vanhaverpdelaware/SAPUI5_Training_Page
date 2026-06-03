@@ -732,6 +732,8 @@ pre[class*="language-"] {
   margin-top: var(--space-sm);
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  max-height: 60vh;
+  overflow-y: auto;
 }
 .search-results.active { display: flex; }
 .search-result-item {

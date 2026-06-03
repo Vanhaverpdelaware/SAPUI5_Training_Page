@@ -134,7 +134,7 @@ function initSearch(root) {
 
   input.addEventListener('input', () => {
     const q = input.value.trim();
-    if (!q || !lunrIndex) {
+    if (!q || q.length < 2 || !lunrIndex) {
       resultsEl.innerHTML = '';
       resultsEl.classList.remove('active');
       navSections.forEach(s => s.style.display = '');
@@ -190,9 +190,11 @@ function initTOC() {
   const body = document.querySelector('.content-body');
   if (!body) return;
 
-  // Reading time
-  const text = body.innerText || '';
-  const words = text.trim().split(/\s+/).length;
+  // Reading time (excludes code blocks and TOC box)
+  const clone = body.cloneNode(true);
+  clone.querySelectorAll('pre, .toc-box').forEach(el => el.remove());
+  const text = clone.innerText || '';
+  const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
   const mins = Math.max(1, Math.round(words / 200));
   const h1 = body.querySelector('h1');
   if (h1) {
@@ -358,6 +360,10 @@ function initHeadingAnchors() {
 }
 
 function initNav() {
+  // Idempotency guard: prevent duplicate DOM nodes on re-init
+  if (document.body.dataset.navInit) return;
+  document.body.dataset.navInit = 'true';
+
   // Skip-to-content for keyboard/screen reader users
   if (!document.getElementById('skip-link')) {
     const skip = document.createElement('a');
