@@ -285,7 +285,92 @@ function initBackToTop() {
   btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
+function autoDetectLanguage() {
+  document.querySelectorAll('pre > code:not([class])').forEach(code => {
+    const t = code.textContent || '';
+    let lang = 'typescript'; // default for this TS training site
+
+    if (/^\s*<[\w:!]/.test(t)) {
+      lang = 'markup'; // XML/HTML
+    } else if (/^\s*(specVersion:|framework:|metadata:|server:|builder:|customMiddleware:|customTasks:)/.test(t)) {
+      lang = 'yaml';
+    } else if (/^\s*\{[\s\S]*"[\w]+"\s*:/.test(t) && !t.includes('\n//')) {
+      lang = 'json';
+    } else if (/^(npm |npx |node |git |ui5 |cf |mbt |mkdir |cd |yo |cds )/.test(t.trim())) {
+      lang = 'bash';
+    } else if (/^(npm |npx |node |git |ui5 |cf |mbt |mkdir |cd |yo |cds )/m.test(t) && t.includes('\n')) {
+      lang = 'bash';
+    } else if (/import\s+\w|export\s+default|:\s*(void|string|number|boolean|JSONModel|ODataModel)|private\s+_|public\s+on/.test(t)) {
+      lang = 'typescript';
+    } else if (/^\s*(#|\/\/|\/\*)/.test(t) && !t.includes('import ')) {
+      lang = 'bash';
+    }
+
+    code.classList.add('language-' + lang);
+    code.parentElement?.classList.add('language-' + lang);
+  });
+}
+
+function initOpenGraph() {
+  if (document.querySelector('meta[property="og:title"]')) return;
+  const title = document.title;
+  const desc = document.querySelector('meta[name="description"]')?.content || title;
+  const url = window.location.href;
+  const tags = [
+    ['og:type',        'website'],
+    ['og:title',       title],
+    ['og:description', desc],
+    ['og:url',         url],
+    ['og:site_name',   'SAPUI5 & TypeScript Training — delaware'],
+    ['twitter:card',   'summary'],
+    ['twitter:title',  title],
+    ['twitter:description', desc],
+  ];
+  tags.forEach(([prop, content]) => {
+    const m = document.createElement('meta');
+    m.setAttribute(prop.startsWith('twitter') ? 'name' : 'property', prop);
+    m.content = content;
+    document.head.appendChild(m);
+  });
+}
+
+function initFavicon() {
+  if (document.querySelector('link[rel="icon"]')) return;
+  const link = document.createElement('link');
+  link.rel = 'icon';
+  link.type = 'image/svg+xml';
+  link.href = (document.body.dataset.root || './') + 'favicon.svg';
+  document.head.appendChild(link);
+}
+
+function initHeadingAnchors() {
+  const body = document.querySelector('.content-body');
+  if (!body) return;
+  body.querySelectorAll('h2, h3').forEach((h, i) => {
+    if (!h.id) h.id = 'section-' + i;
+    const anchor = document.createElement('a');
+    anchor.href = '#' + h.id;
+    anchor.className = 'heading-anchor';
+    anchor.setAttribute('aria-label', 'Link to this section');
+    anchor.innerHTML = '#';
+    h.appendChild(anchor);
+  });
+}
+
 function initNav() {
+  // Skip-to-content for keyboard/screen reader users
+  if (!document.getElementById('skip-link')) {
+    const skip = document.createElement('a');
+    skip.id = 'skip-link';
+    skip.href = '#main-content';
+    skip.textContent = 'Skip to content';
+    skip.className = 'skip-link';
+    document.body.prepend(skip);
+    // Add id to main element
+    const main = document.querySelector('main.main');
+    if (main && !main.id) main.id = 'main-content';
+  }
+
   // Inject Prism.js for syntax highlighting (runs once)
   if (!document.getElementById('prism-css')) {
     const link = document.createElement('link');
@@ -320,6 +405,7 @@ function initNav() {
   const currentPageId = document.body.dataset.page || '';
   mount.innerHTML = buildSidebar(currentPageId, root);
 
+  autoDetectLanguage();
   initCopyButtons();
   initSearch(root);
   initTOC();
@@ -363,6 +449,10 @@ function initNav() {
       link.addEventListener('click', closeSidebar);
     });
   }
+
+  initOpenGraph();
+  initFavicon();
+  initHeadingAnchors();
 }
 
 document.addEventListener('DOMContentLoaded', initNav);
