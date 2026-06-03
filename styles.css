@@ -628,7 +628,6 @@ pre[class*="language-"] {
   position: relative;
   max-width: calc(var(--content-max) + 4rem);
   margin: var(--space-lg) 0;
-  overflow: hidden;
 }
 .pre-wrapper pre {
   margin: 0 !important;
@@ -650,7 +649,7 @@ pre[class*="language-"] {
   transition: opacity 0.15s, background 0.15s;
   letter-spacing: 0.3px;
 }
-.pre-wrapper:hover .copy-btn { opacity: 1; }
+pre:hover .copy-btn { opacity: 1; }
 .copy-btn:hover { background: rgba(255,255,255,0.2); color: white; }
 .copy-btn.copied { background: #2d6a2d; border-color: #2d6a2d; color: white; opacity: 1; }
 

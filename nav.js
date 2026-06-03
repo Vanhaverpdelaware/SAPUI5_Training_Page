@@ -78,17 +78,14 @@ function buildSidebar(currentPageId, root) {
 
 function initCopyButtons() {
   document.querySelectorAll('pre').forEach(pre => {
-    if (pre.parentElement?.classList.contains('pre-wrapper')) return;
-    const wrapper = document.createElement('div');
-    wrapper.className = 'pre-wrapper';
-    pre.parentNode.insertBefore(wrapper, pre);
-    wrapper.appendChild(pre);
+    if (pre.querySelector('.copy-btn')) return;
+    pre.style.position = 'relative';
 
     const btn = document.createElement('button');
     btn.className = 'copy-btn';
     btn.textContent = 'Copy';
     btn.setAttribute('aria-label', 'Copy code to clipboard');
-    wrapper.appendChild(btn);
+    pre.appendChild(btn);
 
     btn.addEventListener('click', () => {
       const code = pre.querySelector('code')?.innerText ?? pre.innerText;
