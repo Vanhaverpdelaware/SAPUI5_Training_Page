@@ -73,11 +73,69 @@ function buildSidebar(currentPageId, root) {
 }
 
 function initNav() {
+  // Inject Prism.js for syntax highlighting (runs once)
+  if (!document.getElementById('prism-css')) {
+    const link = document.createElement('link');
+    link.id = 'prism-css';
+    link.rel = 'stylesheet';
+    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css';
+    document.head.appendChild(link);
+  }
+  if (!document.getElementById('prism-js')) {
+    const script = document.createElement('script');
+    script.id = 'prism-js';
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js';
+    script.onload = () => {
+      const autoloader = document.createElement('script');
+      autoloader.src = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js';
+      document.head.appendChild(autoloader);
+    };
+    document.head.appendChild(script);
+  }
+
   const mount = document.getElementById('nav-mount');
   if (!mount) return;
   const root = document.body.dataset.root || './';
   const currentPageId = document.body.dataset.page || '';
   mount.innerHTML = buildSidebar(currentPageId, root);
+
+  // Inject hamburger button + overlay for mobile
+  if (!document.getElementById('hamburger-btn')) {
+    const sidebar = document.querySelector('.sidebar');
+
+    const overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    overlay.id = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+
+    const btn = document.createElement('button');
+    btn.id = 'hamburger-btn';
+    btn.className = 'hamburger';
+    btn.setAttribute('aria-label', 'Toggle navigation');
+    btn.innerHTML = '☰';
+    document.body.appendChild(btn);
+
+    function openSidebar() {
+      sidebar.classList.add('open');
+      overlay.classList.add('open');
+      btn.innerHTML = '✕';
+    }
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('open');
+      btn.innerHTML = '☰';
+    }
+
+    btn.addEventListener('click', () => {
+      sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+    overlay.addEventListener('click', closeSidebar);
+
+    // Close on nav link click (mobile UX)
+    mount.querySelectorAll('.sidebar-link').forEach(link => {
+      link.addEventListener('click', closeSidebar);
+    });
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initNav);

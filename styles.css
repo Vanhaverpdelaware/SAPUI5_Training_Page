@@ -603,3 +603,66 @@ a:focus-visible {
     text-align: left;
   }
 }
+
+/* ── Prism.js overrides ─────────────────────────────────────────── */
+pre[class*="language-"],
+code[class*="language-"] {
+  font-family: var(--font-mono) !important;
+  font-size: 14px !important;
+  border-radius: var(--radius-md) !important;
+}
+pre[class*="language-"] {
+  padding: var(--space-md) var(--space-lg) !important;
+  margin: var(--space-lg) 0 !important;
+  max-width: calc(var(--content-max) + 4rem) !important;
+}
+
+/* ── Hamburger button ───────────────────────────────────────────── */
+.hamburger {
+  display: none;
+  position: fixed;
+  bottom: var(--space-lg);
+  left: var(--space-lg);
+  z-index: 200;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.hamburger:hover { background: var(--color-primary-hover); }
+
+/* Sidebar overlay on mobile */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 150;
+}
+
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  .sidebar {
+    display: flex !important;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    height: calc(100vh - var(--header-height));
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 160;
+    width: var(--sidebar-width);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .sidebar-overlay.open { display: block; }
+}
