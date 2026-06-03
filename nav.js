@@ -67,7 +67,11 @@ function buildSidebar(currentPageId, root) {
       </details>`;
   }).join('');
 
-  return `<div class="sidebar-head"><span>SAPUI5 Training</span></div>
+  return `<div class="sidebar-search">
+    <input type="search" id="sidebar-search-input" placeholder="Search…" aria-label="Search pages" autocomplete="off">
+    <div id="search-results" class="search-results" aria-live="polite"></div>
+  </div>
+  <div class="sidebar-head"><span>SAPUI5 Training</span></div>
     ${sections}
     <div class="sidebar-footer">SAPUI5 &amp; TypeScript Training v1.0</div>`;
 }
@@ -100,6 +104,74 @@ function initCopyButtons() {
   });
 }
 
+function initSearch(root) {
+  const input = document.getElementById('sidebar-search-input');
+  const resultsEl = document.getElementById('search-results');
+  const navSections = document.querySelectorAll('.sidebar details');
+  if (!input || !resultsEl) return;
+
+  let lunrIndex = null;
+  let pages = [];
+
+  fetch(root + 'search-index.json')
+    .then(r => r.json())
+    .then(data => {
+      pages = data;
+      // Wait for lunr to load
+      const waitForLunr = setInterval(() => {
+        if (typeof lunr !== 'undefined') {
+          clearInterval(waitForLunr);
+          lunrIndex = lunr(function () {
+            this.ref('id');
+            this.field('title', { boost: 10 });
+            this.field('tags');
+            data.forEach(p => this.add(p));
+          });
+        }
+      }, 100);
+    })
+    .catch(() => { /* search unavailable offline */ });
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim();
+    if (!q || !lunrIndex) {
+      resultsEl.innerHTML = '';
+      resultsEl.classList.remove('active');
+      navSections.forEach(s => s.style.display = '');
+      return;
+    }
+    navSections.forEach(s => s.style.display = 'none');
+    try {
+      const hits = lunrIndex.search(q + '*');
+      if (!hits.length) {
+        resultsEl.innerHTML = '<p class="search-empty">No results</p>';
+        resultsEl.classList.add('active');
+        return;
+      }
+      const html = hits.slice(0, 8).map(hit => {
+        const page = pages.find(p => p.id === hit.ref);
+        if (!page) return '';
+        return `<a href="${root}${page.url}" class="search-result-item">${page.title}</a>`;
+      }).join('');
+      resultsEl.innerHTML = html;
+      resultsEl.classList.add('active');
+    } catch {
+      resultsEl.innerHTML = '';
+      resultsEl.classList.remove('active');
+    }
+  });
+
+  // Clear search on nav link click
+  document.addEventListener('click', e => {
+    if (e.target.closest('.search-result-item') || e.target.closest('.sidebar-link')) {
+      input.value = '';
+      resultsEl.innerHTML = '';
+      resultsEl.classList.remove('active');
+      navSections.forEach(s => s.style.display = '');
+    }
+  });
+}
+
 function initNav() {
   // Inject Prism.js for syntax highlighting (runs once)
   if (!document.getElementById('prism-css')) {
@@ -121,6 +193,14 @@ function initNav() {
     document.head.appendChild(script);
   }
 
+  // Inject lunr.js for search
+  if (!document.getElementById('lunr-js')) {
+    const s = document.createElement('script');
+    s.id = 'lunr-js';
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js';
+    document.head.appendChild(s);
+  }
+
   const mount = document.getElementById('nav-mount');
   if (!mount) return;
   const root = document.body.dataset.root || './';
@@ -128,6 +208,7 @@ function initNav() {
   mount.innerHTML = buildSidebar(currentPageId, root);
 
   initCopyButtons();
+  initSearch(root);
 
   // Inject hamburger button + overlay for mobile
   if (!document.getElementById('hamburger-btn')) {
