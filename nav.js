@@ -347,7 +347,7 @@ function initHeadingAnchors() {
   const body = document.querySelector('.content-body');
   if (!body) return;
   body.querySelectorAll('h2, h3').forEach((h, i) => {
-    if (!h.id) h.id = 'section-' + i;
+    if (!h.id) h.id = (h.tagName === 'H3' ? 'subsection-' : 'section-') + i;
     const anchor = document.createElement('a');
     anchor.href = '#' + h.id;
     anchor.className = 'heading-anchor';
@@ -384,8 +384,12 @@ function initNav() {
     script.id = 'prism-js';
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js';
     script.onload = () => {
+      autoDetectLanguage();
       const autoloader = document.createElement('script');
       autoloader.src = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js';
+      autoloader.onload = () => {
+        if (typeof Prism !== 'undefined') Prism.highlightAll();
+      };
       document.head.appendChild(autoloader);
     };
     document.head.appendChild(script);
@@ -405,7 +409,6 @@ function initNav() {
   const currentPageId = document.body.dataset.page || '';
   mount.innerHTML = buildSidebar(currentPageId, root);
 
-  autoDetectLanguage();
   initCopyButtons();
   initSearch(root);
   initTOC();
