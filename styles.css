@@ -918,7 +918,7 @@ h3:hover .heading-anchor { opacity: 1; color: var(--color-primary); }
 /* ── Print styles ───────────────────────────────────────────────── */
 @media print {
   .site-header, .sidebar, .hamburger, .back-to-top,
-  .dark-toggle, .prev-next, .copy-btn, .sidebar-search { display: none !important; }
+  .reading-time, .dark-toggle, .prev-next, .copy-btn, .sidebar-search { display: none !important; }
   .shell { display: block; }
   .main { max-width: 100%; }
   .content-page, .chapter-page { padding: 0; max-width: 100%; }
