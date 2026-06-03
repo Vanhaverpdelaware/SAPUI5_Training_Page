@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — Build &amp; Deploy | delaware</title>
+  <meta name="description" content="Build and deploy SAPUI5 applications to SAP BTP or on-premise ABAP systems using UI5 Tooling.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="build-deploy">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">Development &amp; Tooling</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>Build &amp; Deploy</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>Build &amp; Deploy</h1>
+          <p>Deploying a SAPUI5 application to SAP BTP Cloud Foundry involves building a production bundle, packaging it as an MTA archive, and deploying via CF CLI.</p>
+
+          <h2>1. Production Build</h2>
+          <pre><code># Clean previous build and build for production
+npm run build:cf
+# or directly:
+ui5 build preload --clean-dest</code></pre>
+          <p>Output: <code>dist/</code> folder with <code>Component-preload.js</code> and all assets.</p>
+
+          <h2>2. MTA Configuration</h2>
+          <p>Add an <code>mta.yaml</code> at the project root to define the deployment target:</p>
+          <pre><code>_schema-version: "3.1"
+ID: myapp
+version: 1.0.0
+modules:
+  - name: myapp-ui
+    type: html5
+    path: dist
+    parameters:
+      disk-quota: 256M
+      memory: 256M
+    build-parameters:
+      builder: custom
+      commands:
+        - npm run build:cf
+      supported-platforms: []
+resources:
+  - name: myapp-html5-repo
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host</code></pre>
+
+          <h2>3. Build MTA Archive</h2>
+          <pre><code># Install mbt tool (once)
+npm install --global mbt
+
+# Build the .mtar archive
+mbt build</code></pre>
+          <p>Output: <code>mta_archives/myapp_1.0.0.mtar</code></p>
+
+          <h2>4. Deploy to BTP</h2>
+          <pre><code># Login to CF
+cf login -a https://api.cf.eu10.hana.ondemand.com
+
+# Target your org and space
+cf target -o my-org -s DEV
+
+# Deploy the archive
+cf deploy mta_archives/myapp_1.0.0.mtar</code></pre>
+
+          <h2>5. npm scripts (package.json)</h2>
+          <p>Add these scripts to your <code>package.json</code> for convenience:</p>
+          <pre><code>"scripts": {
+  "start": "ui5 serve --open index.html",
+  "build": "ui5 build --clean-dest",
+  "build:cf": "ui5 build preload --clean-dest",
+  "deploy": "mbt build && cf deploy mta_archives/*.mtar",
+  "lint": "eslint webapp/**/*.ts",
+  "lint:fix": "eslint webapp/**/*.ts --fix"
+}</code></pre>
+
+          <div class="callout note">
+            <strong>CI/CD:</strong> For automated deployments, the <code>deploy</code> script above can be called from an Azure DevOps pipeline or GitLab CI job. Store CF credentials as pipeline secrets.
+          </div>
+
+          <h2>Verify deployment</h2>
+          <p>After deployment, find the app URL in BTP cockpit under <strong>HTML5 Applications</strong>, or use:</p>
+          <pre><code>cf apps   # shows running apps and their routes</code></pre>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <a href="bas-vs-vscode.html" class="nav-btn">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">BAS vs VS Code</span>
+          </a>
+          <span></span>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

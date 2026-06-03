@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Update base URL before publishing to intranet -->
+  <!-- Home -->
+  <url><loc>https://training.delaware.internal/sapui5/index.html</loc><priority>1.0</priority></url>
+  <!-- Prerequisites -->
+  <url><loc>https://training.delaware.internal/sapui5/01-prerequisites/index.html</loc><priority>0.9</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/01-prerequisites/ide-setup.html</loc><priority>0.8</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/01-prerequisites/nodejs-tooling.html</loc><priority>0.8</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/01-prerequisites/system-access.html</loc><priority>0.8</priority></url>
+  <!-- SAPUI5 Basics -->
+  <url><loc>https://training.delaware.internal/sapui5/02-sapui5-basics/index.html</loc><priority>0.9</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/02-sapui5-basics/mvc-pattern.html</loc><priority>0.8</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/02-sapui5-basics/views-controllers.html</loc><priority>0.8</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/02-sapui5-basics/data-binding.html</loc><priority>0.8</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/02-sapui5-basics/odata-basics.html</loc><priority>0.8</priority></url>
+  <!-- TypeScript in UI5 -->
+  <url><loc>https://training.delaware.internal/sapui5/03-typescript-in-ui5/index.html</loc><priority>0.9</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/03-typescript-in-ui5/ts-setup.html</loc><priority>0.8</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/03-typescript-in-ui5/types-and-classes.html</loc><priority>0.8</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/03-typescript-in-ui5/strict-mode.html</loc><priority>0.8</priority></url>
+  <!-- Development & Tooling -->
+  <url><loc>https://training.delaware.internal/sapui5/04-dev-tooling/index.html</loc><priority>0.9</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/04-dev-tooling/ui5-tooling.html</loc><priority>0.8</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/04-dev-tooling/bas-vs-vscode.html</loc><priority>0.8</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/04-dev-tooling/build-deploy.html</loc><priority>0.8</priority></url>
+  <!-- Exercises -->
+  <url><loc>https://training.delaware.internal/sapui5/05-exercises/index.html</loc><priority>0.9</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/05-exercises/exercise-1.html</loc><priority>0.8</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/05-exercises/exercise-2.html</loc><priority>0.8</priority></url>
+  <url><loc>https://training.delaware.internal/sapui5/05-exercises/exercise-3.html</loc><priority>0.8</priority></url>
+</urlset>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAPUI5 & TypeScript Training — Mockup</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ── Mockup switcher (mockup-only) ─────────────────────────────── */
+.mockup-bar {
+  background: #2d2d2d;
+  padding: 10px 20px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 2px solid var(--color-primary);
+}
+.mockup-bar label { color: #aaa; font-size: 12px; margin-right: 4px; font-family: var(--font-mono); }
+.mockup-btn {
+  padding: 5px 14px;
+  font-size: 12px;
+  border: 1px solid #555;
+  background: #444;
+  color: #ccc;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background 0.15s;
+}
+.mockup-btn:hover { background: #555; }
+.mockup-btn.active { background: var(--color-primary); border-color: var(--color-primary); color: white; font-weight: 600; }
+
+/* ── Mockup views ──────────────────────────────────────────────── */
+.view { display: none; flex-direction: column; min-height: calc(100vh - 50px); }
+.view.active { display: flex; }
+</style>
+</head>
+<body>
+
+<!-- MOCKUP SWITCHER -->
+<div class="mockup-bar">
+  <label>MOCKUP:</label>
+  <button class="mockup-btn active" onclick="show('home', this)">🏠 Home Page</button>
+  <button class="mockup-btn" onclick="show('chapter', this)">📂 Chapter Index</button>
+  <button class="mockup-btn" onclick="show('content', this)">📄 Content Page</button>
+</div>
+
+<!-- ═══════════════════════════════ VIEW: HOME ══════════════════════════════ -->
+<div id="view-home" class="view active">
+  <header class="site-header">
+    <span class="badge">UI5</span>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="spacer"></div>
+    <nav class="top-nav">
+      <a href="#">Home</a>
+      <a href="#">Documents</a>
+      <a href="#">Pages</a>
+      <a href="#">Site contents</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="sidebar-head"><span>SAPUI5 Training</span></div>
+      <details open>
+        <summary>01 Prerequisites <span class="chevron">›</span></summary>
+        <a href="#" class="sidebar-link">IDE Setup</a>
+        <a href="#" class="sidebar-link">Node.js &amp; Tooling</a>
+        <a href="#" class="sidebar-link">System Access</a>
+      </details>
+      <details>
+        <summary>02 SAPUI5 Basics <span class="chevron">›</span></summary>
+        <a href="#" class="sidebar-link">MVC Pattern</a>
+        <a href="#" class="sidebar-link">Views &amp; Controllers</a>
+        <a href="#" class="sidebar-link">Data Binding</a>
+        <a href="#" class="sidebar-link">OData Basics</a>
+      </details>
+      <details>
+        <summary>03 TypeScript in UI5 <span class="chevron">›</span></summary>
+        <a href="#" class="sidebar-link">TypeScript Setup</a>
+        <a href="#" class="sidebar-link">Types &amp; Classes</a>
+        <a href="#" class="sidebar-link">Strict Mode</a>
+      </details>
+      <details>
+        <summary>04 Dev &amp; Tooling <span class="chevron">›</span></summary>
+        <a href="#" class="sidebar-link">UI5 Tooling</a>
+        <a href="#" class="sidebar-link">BAS vs VS Code</a>
+        <a href="#" class="sidebar-link">Build &amp; Deploy</a>
+      </details>
+      <details>
+        <summary>05 Exercises <span class="chevron">›</span></summary>
+        <a href="#" class="sidebar-link">Exercise 1</a>
+        <a href="#" class="sidebar-link">Exercise 2</a>
+        <a href="#" class="sidebar-link">Exercise 3</a>
+      </details>
+      <div class="sidebar-footer">SAPUI5 Training v1.0</div>
+    </aside>
+    <main class="main">
+      <div class="home-section">
+        <h2>SAPUI5 Training</h2>
+        <div class="cards-grid">
+          <a href="#" class="card">
+            <div class="card-icon">⚙️</div>
+            <div class="card-body">
+              <h3>Prerequisites</h3>
+              <p>Tools, accounts and IDE setup required before starting the training.</p>
+              <span class="card-tag">All</span>
+            </div>
+          </a>
+          <a href="#" class="card">
+            <div class="card-icon">📐</div>
+            <div class="card-body">
+              <h3>SAPUI5 Basics</h3>
+              <p>Core UI5 concepts: MVC, data binding, controls and views.</p>
+              <span class="card-tag">All</span>
+            </div>
+          </a>
+          <a href="#" class="card">
+            <div class="card-icon">🔷</div>
+            <div class="card-body">
+              <h3>TypeScript in UI5</h3>
+              <p>TypeScript setup, class syntax, strict mode and type annotations in UI5.</p>
+              <span class="card-tag">All</span>
+            </div>
+          </a>
+          <a href="#" class="card">
+            <div class="card-icon">🛠️</div>
+            <div class="card-body">
+              <h3>Development &amp; Tooling</h3>
+              <p>UI5 Tooling, BAS vs VS Code setup, linting, build and deploy.</p>
+              <span class="card-tag">All</span>
+            </div>
+          </a>
+          <a href="#" class="card">
+            <div class="card-icon">📝</div>
+            <div class="card-body">
+              <h3>Exercises</h3>
+              <p>Hands-on exercises to practise your SAPUI5 &amp; TypeScript skills.</p>
+              <span class="card-tag">All</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+</div>
+
+<!-- ═══════════════════════════════ VIEW: CHAPTER ════════════════════════════ -->
+<div id="view-chapter" class="view">
+  <header class="site-header">
+    <span class="badge">UI5</span>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="spacer"></div>
+    <nav class="top-nav"><a href="#">Home</a><a href="#">Documents</a><a href="#">Pages</a></nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="sidebar-head"><span>SAPUI5 Training</span></div>
+      <details open>
+        <summary>01 Prerequisites <span class="chevron">›</span></summary>
+        <a href="#" class="sidebar-link active">IDE Setup</a>
+        <a href="#" class="sidebar-link">Node.js &amp; Tooling</a>
+        <a href="#" class="sidebar-link">System Access</a>
+      </details>
+      <details>
+        <summary>02 SAPUI5 Basics <span class="chevron">›</span></summary>
+      </details>
+      <details>
+        <summary>03 TypeScript in UI5 <span class="chevron">›</span></summary>
+      </details>
+      <details>
+        <summary>04 Dev &amp; Tooling <span class="chevron">›</span></summary>
+      </details>
+      <details>
+        <summary>05 Exercises <span class="chevron">›</span></summary>
+      </details>
+      <div class="sidebar-footer">SAPUI5 Training v1.0</div>
+    </aside>
+    <main class="main">
+      <div class="chapter-page">
+        <nav class="breadcrumb">
+          <a href="#">SAPUI5 Training</a>
+          <span class="sep">›</span>
+          <strong>Prerequisites</strong>
+        </nav>
+        <div class="page-nav-bar">
+          <select>
+            <option>IDE Setup</option>
+            <option>Node.js &amp; UI5 Tooling</option>
+            <option>System Access</option>
+          </select>
+          <button class="btn btn-primary">Next →</button>
+        </div>
+        <div class="chapter-intro">
+          <h1>Prerequisites</h1>
+          <p>This chapter covers everything you need before starting the SAPUI5 training. Follow each sub-page in order to prepare your development environment.</p>
+        </div>
+        <div class="chapter-links">
+          <a href="#" class="chapter-link-item">
+            <span class="link-num">01</span>
+            <span class="link-title">IDE Setup</span>
+            <span class="link-arrow">›</span>
+          </a>
+          <a href="#" class="chapter-link-item">
+            <span class="link-num">02</span>
+            <span class="link-title">Node.js &amp; UI5 Tooling</span>
+            <span class="link-arrow">›</span>
+          </a>
+          <a href="#" class="chapter-link-item">
+            <span class="link-num">03</span>
+            <span class="link-title">System Access</span>
+            <span class="link-arrow">›</span>
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+</div>
+
+<!-- ═══════════════════════════════ VIEW: CONTENT ════════════════════════════ -->
+<div id="view-content" class="view">
+  <header class="site-header">
+    <span class="badge">UI5</span>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="spacer"></div>
+    <nav class="top-nav"><a href="#">Home</a><a href="#">Documents</a><a href="#">Pages</a></nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="sidebar-head"><span>SAPUI5 Training</span></div>
+      <details open>
+        <summary>01 Prerequisites <span class="chevron">›</span></summary>
+        <a href="#" class="sidebar-link active">IDE Setup</a>
+        <a href="#" class="sidebar-link">Node.js &amp; Tooling</a>
+        <a href="#" class="sidebar-link">System Access</a>
+      </details>
+      <details>
+        <summary>02 SAPUI5 Basics <span class="chevron">›</span></summary>
+      </details>
+      <details>
+        <summary>03 TypeScript in UI5 <span class="chevron">›</span></summary>
+      </details>
+      <details>
+        <summary>04 Dev &amp; Tooling <span class="chevron">›</span></summary>
+      </details>
+      <details>
+        <summary>05 Exercises <span class="chevron">›</span></summary>
+      </details>
+      <div class="sidebar-footer">SAPUI5 Training v1.0</div>
+    </aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb">
+          <a href="#">SAPUI5 Training</a>
+          <span class="sep">›</span>
+          <a href="#">Prerequisites</a>
+          <span class="sep">›</span>
+          <strong>IDE Setup</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar">👤</div>
+          <div class="author-info">
+            <strong>Pieter-Jan Vanhaverbeke</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <div class="content-body">
+          <h1>IDE Setup</h1>
+          <p>This page will guide you through setting up your development environment for SAPUI5 and TypeScript development. You can use either <strong>VS Code</strong> or <strong>SAP Business Application Studio (BAS)</strong>.</p>
+
+          <div class="callout note">
+            <strong>Note:</strong> If you already have VS Code installed with the SAP Fiori Tools extension, you can skip to <a href="#">Node.js &amp; Tooling</a>.
+          </div>
+
+          <h2>Install VS Code</h2>
+          <p>Download and install VS Code from the delaware Company Portal. Search for <code>Visual Studio Code</code> in the portal app.</p>
+
+          <pre><code>// Placeholder: installation steps go here</code></pre>
+
+          <div class="callout tip">
+            <strong>Tip:</strong> Placeholder content — team fills this in before sharing with trainees.
+          </div>
+        </div>
+        <nav class="prev-next">
+          <a href="#" class="nav-btn">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">Chapter Overview</span>
+          </a>
+          <a href="#" class="nav-btn next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Node.js &amp; Tooling</span>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+</div>
+
+<script>
+function show(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.mockup-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

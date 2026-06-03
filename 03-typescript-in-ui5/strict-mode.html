@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — Strict Mode | delaware</title>
+  <meta name="description" content="Understand TypeScript strict mode settings and how they improve code quality in SAPUI5 projects.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="strict-mode">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">TypeScript in UI5</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>Strict Mode</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>Strict Mode</h1>
+          <p>TypeScript strict mode catches a class of bugs at compile time that would only surface at runtime in JavaScript. At delaware, <code>strict: true</code> is mandatory (ADR-002).</p>
+
+          <h2>What strict mode enables</h2>
+          <table style="width:100%;max-width:72ch;border-collapse:collapse;font-size:0.9375rem;margin-bottom:1.5rem;">
+            <thead><tr style="border-bottom:2px solid var(--color-border);">
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Flag</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">What it prevents</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><code>strictNullChecks</code></td>
+                <td style="padding:8px 12px;"><code>null</code>/<code>undefined</code> bugs — must handle them explicitly</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><code>noImplicitAny</code></td>
+                <td style="padding:8px 12px;">Implicit <code>any</code> types — forces explicit typing</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><code>noImplicitReturns</code></td>
+                <td style="padding:8px 12px;">Functions that don't always return a value</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><code>noUnusedLocals</code></td>
+                <td style="padding:8px 12px;">Unused local variables (dead code)</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;"><code>noUnusedParameters</code></td>
+                <td style="padding:8px 12px;">Unused function parameters</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>Common strict mode patterns in UI5</h2>
+
+          <h3>Handling optional chaining (<code>?.getView()</code>)</h3>
+          <p>With <code>strictNullChecks</code>, <code>getView()</code> can return <code>undefined</code>. Use optional chaining:</p>
+          <pre><code>// ❌ Fails strict check
+const oModel = this.getView().getModel("view") as JSONModel;
+
+// ✅ Correct with strict mode
+const oModel = this.getView()?.getModel("view") as JSONModel;</code></pre>
+
+          <h3>Non-null assertion for framework-initialized properties</h3>
+          <p>UI5 sets some properties via the framework after the constructor. Use <code>!</code> to tell TypeScript these will be set before use:</p>
+          <pre><code>// The framework initializes this before onInit() is called
+private _oViewModel!: JSONModel;
+private _oDataModel!: ODataModel;</code></pre>
+
+          <h3>Type assertions for event parameters</h3>
+          <pre><code>public onInputChange(oEvent: Event): void {
+  // getParameter() returns unknown — cast it
+  const sValue = oEvent.getParameter("value") as string;
+  const nValue = oEvent.getParameter("selectedIndex") as number;
+}</code></pre>
+
+          <h3>ESLint rules at delaware</h3>
+          <p>From <a href="https://delawareconsulting.atlassian.net/wiki/spaces/SAPDEV/pages/1261764664" target="_blank" rel="noopener">TDD-001</a>, the project ESLint config enforces:</p>
+          <pre><code>{
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/explicit-function-return-type": "warn",
+    "@typescript-eslint/no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_"
+    }],
+    "prefer-const": "error",
+    "no-var": "error"
+  }
+}</code></pre>
+          <div class="callout tip">
+            <strong>Tip:</strong> Prefix intentionally unused parameters with <code>_</code> to satisfy the <code>argsIgnorePattern</code> rule — e.g. <code>_oEvent</code> for an event parameter you receive but don't use.
+          </div>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <a href="types-and-classes.html" class="nav-btn">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">Types &amp; Classes</span>
+          </a>
+          <span></span>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

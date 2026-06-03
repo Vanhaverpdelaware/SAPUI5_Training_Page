@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — MVC Pattern | delaware</title>
+  <meta name="description" content="Understand the Model-View-Controller pattern as implemented in SAPUI5 applications.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="mvc-pattern">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">SAPUI5 Basics</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>MVC Pattern</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>MVC Pattern</h1>
+          <p>SAPUI5 follows the <strong>Model-View-Controller (MVC)</strong> architectural pattern. Every UI5 application separates concerns into three distinct layers.</p>
+
+          <h2>The Three Layers</h2>
+          <table style="width:100%;max-width:72ch;border-collapse:collapse;font-size:0.9375rem;margin-bottom:1.5rem;">
+            <thead><tr style="border-bottom:2px solid var(--color-border);">
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Layer</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Responsibility</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">File type</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><strong>Model</strong></td>
+                <td style="padding:8px 12px;">Holds data (JSON, OData V4, i18n)</td>
+                <td style="padding:8px 12px;"><code>.ts</code> / <code>manifest.json</code></td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><strong>View</strong></td>
+                <td style="padding:8px 12px;">Declares the UI structure declaratively</td>
+                <td style="padding:8px 12px;"><code>.view.xml</code></td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;"><strong>Controller</strong></td>
+                <td style="padding:8px 12px;">Handles user interaction and business logic</td>
+                <td style="padding:8px 12px;"><code>.controller.ts</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>Project Folder Structure</h2>
+          <p>A standard delaware UI5 project follows this structure inside <code>webapp/</code>:</p>
+          <pre><code>webapp/
+├── Component.ts           # App entry point
+├── manifest.json          # App descriptor
+├── index.html             # Bootstrap
+├── controller/
+│   ├── App.controller.ts
+│   └── List.controller.ts
+├── view/
+│   ├── App.view.xml
+│   └── List.view.xml
+├── model/
+│   ├── formatter.ts
+│   └── types.ts
+└── i18n/
+    └── i18n.properties</code></pre>
+
+          <h2>Why MVC?</h2>
+          <div class="callout note">
+            <strong>delaware standard:</strong> Avoid putting all logic in controllers. Extract reusable logic into TypeScript classes in the <code>model/</code> folder. Large controllers become hard to maintain and cause duplicate code. See the <a href="https://delawareconsulting.atlassian.net/wiki/spaces/SAPDEV/pages/131239864" target="_blank" rel="noopener">Class-based development guide</a> on Confluence.
+          </div>
+          <p>Separating concerns means:</p>
+          <ul>
+            <li>Views can be redesigned without touching business logic</li>
+            <li>Controllers stay thin — they orchestrate, not implement</li>
+            <li>Models are reusable across multiple views</li>
+          </ul>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <span></span>
+          <a href="views-controllers.html" class="nav-btn next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Views &amp; Controllers</span>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

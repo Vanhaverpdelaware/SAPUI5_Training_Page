@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — Exercise 3 | delaware</title>
+  <meta name="description" content="Hands-on exercise 3: add TypeScript strict mode and refactor an existing SAPUI5 application.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="exercise-3">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">Exercises</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>Exercise 3</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>Exercise 3</h1>
+          <p>In this exercise you replace the local JSON model with a real OData V4 service from a CAP backend, and add input validation with proper error handling.</p>
+
+          <div class="callout note">
+            <strong>Prerequisites:</strong> Complete <a href="exercise-2.html">Exercise 2</a>. You also need Node.js and <code>@sap/cds-dk</code> installed: <code>npm install -g @sap/cds-dk</code>.
+          </div>
+
+          <h2>Goal</h2>
+          <p>Connect your UI5 app to a CAP OData V4 service, display real data, and add a create form with TypeScript validation and error handling.</p>
+
+          <h2>Step 1 — Create a minimal CAP backend</h2>
+          <pre><code>mkdir backend &amp;&amp; cd backend
+npm init -y
+npm install @sap/cds express
+npx cds init .</code></pre>
+          <p>Create <code>backend/db/schema.cds</code>:</p>
+          <pre><code>namespace training;
+entity Materials {
+  key id   : String(4);
+  name     : String(100);
+  quantity : Integer;
+}</code></pre>
+          <p>Create <code>backend/srv/service.cds</code>:</p>
+          <pre><code>using training from '../db/schema';
+service TrainingService @(path: '/api/training') {
+  entity Materials as projection on training.Materials;
+}</code></pre>
+          <p>Seed data in <code>backend/db/data/training-Materials.csv</code>:</p>
+          <pre><code>id,name,quantity
+MAT1,Material Alpha,100
+MAT2,Material Beta,250
+MAT3,Material Gamma,50</code></pre>
+          <p>Start the backend:</p>
+          <pre><code>cd backend &amp;&amp; cds watch</code></pre>
+          <p>Open <code>http://localhost:4004/api/training/Materials</code> — you should see JSON data.</p>
+
+          <h2>Step 2 — Configure the OData model in manifest.json</h2>
+          <p>Replace the JSON model with an OData V4 model in <code>manifest.json</code>:</p>
+          <pre><code>"sap.app": {
+  "dataSources": {
+    "mainService": {
+      "uri": "/api/training/",
+      "type": "OData",
+      "settings": { "odataVersion": "4.0" }
+    }
+  }
+},
+"sap.ui5": {
+  "models": {
+    "": {
+      "dataSource": "mainService",
+      "type": "sap.ui.model.odata.v4.ODataModel",
+      "settings": {
+        "synchronizationMode": "None",
+        "operationMode": "Server",
+        "autoExpandSelect": true
+      }
+    }
+  }
+}</code></pre>
+
+          <h2>Step 3 — Add proxy to ui5.yaml</h2>
+          <pre><code>server:
+  customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        backend:
+          - path: /api
+            url: http://localhost:4004</code></pre>
+          <p>Restart the UI5 dev server. The list should now show data from CAP.</p>
+
+          <h2>Step 4 — Add a create form with validation</h2>
+          <p>Add an input form to <code>Main.view.xml</code>:</p>
+          <pre><code>&lt;Panel headerText="Add Material" class="sapUiMediumMargin"&gt;
+  &lt;content&gt;
+    &lt;SimpleForm&gt;
+      &lt;Label text="ID (4 chars)" /&gt;
+      &lt;Input id="idInput" value="{view>/newId}"
+        valueState="{view>/idState}"
+        valueStateText="ID must be exactly 4 characters" /&gt;
+      &lt;Label text="Name" /&gt;
+      &lt;Input value="{view>/newName}" /&gt;
+      &lt;Label text="Quantity" /&gt;
+      &lt;Input value="{view>/newQty}" type="Number" /&gt;
+    &lt;/SimpleForm&gt;
+    &lt;Button text="Add" type="Emphasized" press=".onAddPress" /&gt;
+  &lt;/content&gt;
+&lt;/Panel&gt;</code></pre>
+          <p>In the controller, add validation:</p>
+          <pre><code>public onAddPress(): void {
+  const oViewModel = this.getView()?.getModel("view") as JSONModel;
+  const sId = oViewModel.getProperty("/newId") as string;
+
+  if (sId.length !== 4) {
+    oViewModel.setProperty("/idState", "Error");
+    return;
+  }
+  oViewModel.setProperty("/idState", "None");
+
+  const oDataModel = this.getView()?.getModel() as ODataModel;
+  const oBinding = oDataModel.bindList("/Materials");
+  oBinding.create({
+    id: sId,
+    name: oViewModel.getProperty("/newName") as string,
+    quantity: parseInt(oViewModel.getProperty("/newQty") as string, 10)
+  });
+
+  MessageToast.show("Material created successfully");
+}</code></pre>
+
+          <div class="callout tip">
+            <strong>Completed all 3 exercises!</strong> You have built a TypeScript UI5 app with MVC, routing, an OData V4 connection, and input validation — the core skills for any Fiori project at delaware.
+          </div>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <a href="exercise-2.html" class="nav-btn">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">Exercise 2</span>
+          </a>
+          <span></span>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

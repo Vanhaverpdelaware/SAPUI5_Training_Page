@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — BAS vs VS Code | delaware</title>
+  <meta name="description" content="Compare SAP Business Application Studio and VS Code for SAPUI5 development and choose the right tool.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="bas-vs-vscode">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">Development &amp; Tooling</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>BAS vs VS Code</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>BAS vs VS Code</h1>
+          <p>Both IDEs support SAPUI5 TypeScript development. The choice depends on your project setup and working environment.</p>
+
+          <h2>Comparison</h2>
+          <table style="width:100%;max-width:72ch;border-collapse:collapse;font-size:0.9375rem;margin-bottom:1.5rem;">
+            <thead><tr style="border-bottom:2px solid var(--color-border);">
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Feature</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">SAP Business Application Studio</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">VS Code (local)</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">Setup effort</td>
+                <td style="padding:8px 12px;">Zero — pre-configured</td>
+                <td style="padding:8px 12px;">Manual: Node.js, extensions</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">SAP Fiori Tools</td>
+                <td style="padding:8px 12px;">Pre-installed</td>
+                <td style="padding:8px 12px;">Install extension pack</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">BTP connectivity</td>
+                <td style="padding:8px 12px;">Native, no CF CLI needed</td>
+                <td style="padding:8px 12px;">Requires CF CLI + login</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">Offline use</td>
+                <td style="padding:8px 12px;">No — browser-based</td>
+                <td style="padding:8px 12px;">Yes — fully local</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">Performance</td>
+                <td style="padding:8px 12px;">Depends on network</td>
+                <td style="padding:8px 12px;">Fast, local machine</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">Extensions</td>
+                <td style="padding:8px 12px;">Limited to Open VSX</td>
+                <td style="padding:8px 12px;">Full VS Code marketplace</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;">Cost</td>
+                <td style="padding:8px 12px;">Requires BTP subscription</td>
+                <td style="padding:8px 12px;">Free</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>When to use BAS</h2>
+          <ul>
+            <li>Client requires development inside their BTP landscape</li>
+            <li>You need to connect directly to their S/4HANA system during development</li>
+            <li>Onboarding quickly without local setup</li>
+          </ul>
+
+          <h2>When to use VS Code locally</h2>
+          <ul>
+            <li>Daily development — faster iteration, better performance</li>
+            <li>Offline or low-connectivity situations</li>
+            <li>Full extension ecosystem (GitHub Copilot, custom themes, etc.)</li>
+          </ul>
+
+          <h2>VS Code setup for UI5</h2>
+          <p>Install the <strong>SAP Fiori Tools Extension Pack</strong> (<code>sapse.sap-ux-fiori-tools-extension-pack</code>) which includes:</p>
+          <ul>
+            <li>Fiori Application Generator (scaffolding)</li>
+            <li>XML View editor with code hints</li>
+            <li>Fiori Freestyle OData linter</li>
+            <li>Service modeler</li>
+          </ul>
+          <pre><code># Install via VS Code CLI
+code --install-extension sapse.sap-ux-fiori-tools-extension-pack</code></pre>
+
+          <div class="callout tip">
+            <strong>delaware preference:</strong> Use VS Code locally for development and BAS for final deployment configuration and testing against the client BTP system.
+          </div>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <a href="ui5-tooling.html" class="nav-btn">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">UI5 Tooling</span>
+          </a>
+          <a href="build-deploy.html" class="nav-btn next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Build &amp; Deploy</span>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

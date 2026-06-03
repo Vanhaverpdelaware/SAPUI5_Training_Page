@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — Data Binding | delaware</title>
+  <meta name="description" content="Explore the SAPUI5 data binding concepts including property, aggregation, and element binding.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="data-binding">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">SAPUI5 Basics</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>Data Binding</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>Data Binding</h1>
+          <p>Data binding connects your model data to UI controls automatically. Change the model — the view updates. UI5 supports three binding modes.</p>
+
+          <h2>Binding Modes</h2>
+          <table style="width:100%;max-width:72ch;border-collapse:collapse;font-size:0.9375rem;margin-bottom:1.5rem;">
+            <thead><tr style="border-bottom:2px solid var(--color-border);">
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Mode</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Direction</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Default for</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><strong>One-Way</strong></td>
+                <td style="padding:8px 12px;">Model → View</td>
+                <td style="padding:8px 12px;">JSON Model, Resource Model</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><strong>Two-Way</strong></td>
+                <td style="padding:8px 12px;">Model ↔ View</td>
+                <td style="padding:8px 12px;">OData V4 Model</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;"><strong>One-Time</strong></td>
+                <td style="padding:8px 12px;">Model → View (once)</td>
+                <td style="padding:8px 12px;">OData MetaModel V4</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>Property Binding</h2>
+          <p>Bind a single value with curly braces. The path starts with <code>/</code> for absolute, no slash for relative:</p>
+          <pre><code>&lt;!-- Absolute path from model root --&gt;
+&lt;Input value="{/recipient/name}" /&gt;
+
+&lt;!-- Relative path (within a bound context) --&gt;
+&lt;Text text="{Name}" /&gt;
+
+&lt;!-- Named model (view model) --&gt;
+&lt;Button enabled="{view>/isValid}" /&gt;</code></pre>
+
+          <h2>List Binding (Aggregation Binding)</h2>
+          <p>Bind a collection to a list control:</p>
+          <pre><code>&lt;List items="{/Products}"&gt;
+  &lt;StandardListItem
+    title="{ProductName}"
+    description="{Price}" /&gt;
+&lt;/List&gt;</code></pre>
+
+          <h2>Binding in TypeScript</h2>
+          <p>Setting a model and binding programmatically from a controller:</p>
+          <pre><code>// Set a JSON model on the view
+const oModel = new JSONModel({ plant: "", isValid: false });
+this.getView()?.setModel(oModel, "view");
+
+// Read a bound value
+const sPlant = oModel.getProperty("/plant") as string;
+
+// Update a bound value (view auto-updates)
+oModel.setProperty("/isValid", sPlant.length === 4);</code></pre>
+
+          <h2>i18n Binding</h2>
+          <p>Text strings are externalized in <code>i18n/i18n.properties</code> and bound with <code>{i18n&gt;key}</code>:</p>
+          <pre><code>&lt;!-- In XML view --&gt;
+&lt;Button text="{i18n&gt;executeButton}" /&gt;
+
+&lt;!-- In i18n.properties --&gt;
+executeButton=Execute</code></pre>
+          <div class="callout tip">
+            <strong>Rule:</strong> Never hardcode UI text in XML views. Always use i18n. This enables future translation and keeps text centralized.
+          </div>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <a href="views-controllers.html" class="nav-btn">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">Views &amp; Controllers</span>
+          </a>
+          <a href="odata-basics.html" class="nav-btn next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">OData Basics</span>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

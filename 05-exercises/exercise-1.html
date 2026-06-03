@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — Exercise 1 | delaware</title>
+  <meta name="description" content="Hands-on exercise 1: build your first SAPUI5 application using the MVC pattern and basic controls.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="exercise-1">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">Exercises</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>Exercise 1</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>Exercise 1</h1>
+          <p>In this exercise you scaffold a new SAPUI5 TypeScript project from scratch and get it running locally. No prior UI5 knowledge assumed — just follow the steps.</p>
+
+          <div class="callout note">
+            <strong>Prerequisites:</strong> Complete the <a href="../01-prerequisites/nodejs-tooling.html">Node.js &amp; UI5 Tooling</a> setup page before starting.
+          </div>
+
+          <h2>Goal</h2>
+          <p>By the end of this exercise you will have a running SAPUI5 TypeScript app displaying a list of items from a JSON model, with a working sidebar navigation and a detail view.</p>
+
+          <h2>Step 1 — Scaffold the project</h2>
+          <pre><code># Create a new folder and open it
+mkdir ui5-training-app
+cd ui5-training-app
+
+# Scaffold with easy-ui5
+yo easy-ui5 project</code></pre>
+          <p>When prompted:</p>
+          <ul>
+            <li><strong>Project name:</strong> <code>ui5.training.app</code></li>
+            <li><strong>Namespace:</strong> <code>ui5.training</code></li>
+            <li><strong>UI5 version:</strong> <code>1.120.0</code></li>
+            <li><strong>TypeScript:</strong> Yes</li>
+            <li><strong>Add Karma tests:</strong> No (for now)</li>
+          </ul>
+
+          <h2>Step 2 — Install dependencies</h2>
+          <pre><code>npm install</code></pre>
+
+          <h2>Step 3 — Start the dev server</h2>
+          <pre><code>ui5 serve --open index.html</code></pre>
+          <p>The browser opens at <code>http://localhost:8080</code>. You should see the scaffolded app. Open the browser console (F12) — there should be no errors.</p>
+
+          <h2>Step 4 — Explore the project structure</h2>
+          <p>Locate and open these files in VS Code:</p>
+          <ul>
+            <li><code>webapp/manifest.json</code> — app descriptor, routing config</li>
+            <li><code>webapp/view/Main.view.xml</code> — the main XML view</li>
+            <li><code>webapp/controller/Main.controller.ts</code> — the controller</li>
+            <li><code>ui5.yaml</code> — tooling config</li>
+            <li><code>tsconfig.json</code> — TypeScript config</li>
+          </ul>
+
+          <h2>Step 5 — Add a JSON model</h2>
+          <p>In <code>Main.controller.ts</code>, add a JSON model in <code>onInit()</code>:</p>
+          <pre><code>import Controller from "sap/ui/core/mvc/Controller";
+import JSONModel from "sap/ui/model/json/JSONModel";
+
+/** @namespace ui5.training.controller */
+export default class Main extends Controller {
+  public onInit(): void {
+    const oModel = new JSONModel({
+      items: [
+        { id: "1", name: "Material A", quantity: 100 },
+        { id: "2", name: "Material B", quantity: 250 },
+        { id: "3", name: "Material C", quantity: 50 }
+      ]
+    });
+    this.getView()?.setModel(oModel);
+  }
+}</code></pre>
+
+          <h2>Step 6 — Display the list in the view</h2>
+          <p>In <code>Main.view.xml</code>, replace the placeholder content with a list:</p>
+          <pre><code>&lt;mvc:View controllerName="ui5.training.controller.Main"
+  xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"&gt;
+  &lt;Page title="Materials"&gt;
+    &lt;content&gt;
+      &lt;List items="{/items}"&gt;
+        &lt;StandardListItem
+          title="{name}"
+          description="Qty: {quantity}" /&gt;
+      &lt;/List&gt;
+    &lt;/content&gt;
+  &lt;/Page&gt;
+&lt;/mvc:View&gt;</code></pre>
+          <p>Save the file — the browser auto-refreshes and shows your 3 items.</p>
+
+          <h2>Step 7 — Verify TypeScript is working</h2>
+          <p>Introduce a deliberate type error in the controller:</p>
+          <pre><code>// Add this line in onInit() — it should show a red underline
+const x: number = "this is wrong";</code></pre>
+          <p>VS Code should show a TypeScript error. Remove the line after confirming it works.</p>
+
+          <div class="callout tip">
+            <strong>Done!</strong> You now have a working SAPUI5 TypeScript app with a JSON model bound to a list. Continue to Exercise 2 to add routing and a detail view.
+          </div>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <span></span>
+          <a href="exercise-2.html" class="nav-btn next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Exercise 2</span>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

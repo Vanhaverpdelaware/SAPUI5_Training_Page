@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — Views &amp; Controllers | delaware</title>
+  <meta name="description" content="Learn how to create and connect XML views and JavaScript controllers in SAPUI5 applications.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="views-controllers">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">SAPUI5 Basics</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>Views &amp; Controllers</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>Views &amp; Controllers</h1>
+          <h2>XML Views</h2>
+          <p>UI5 views are written in XML. Each view declares which controls to render and binds them to data via curly-brace syntax.</p>
+          <pre><code>&lt;mvc:View
+  controllerName="myapp.controller.List"
+  xmlns="sap.m"
+  xmlns:mvc="sap.ui.core.mvc"&gt;
+
+  &lt;Page title="{i18n&gt;listTitle}"&gt;
+    &lt;content&gt;
+      &lt;List items="{/Products}"&gt;
+        &lt;StandardListItem
+          title="{Name}"
+          description="{Price}" /&gt;
+      &lt;/List&gt;
+    &lt;/content&gt;
+  &lt;/Page&gt;
+
+&lt;/mvc:View&gt;</code></pre>
+          <p>The <code>xmlns</code> declarations determine which control library is available. <code>sap.m</code> is the standard mobile-ready library used for most Fiori apps.</p>
+
+          <h2>TypeScript Controllers</h2>
+          <p>Controllers handle user events and interact with models. At delaware we use TypeScript with the class pattern:</p>
+          <pre><code>import Controller from "sap/ui/core/mvc/Controller";
+import JSONModel from "sap/ui/model/json/JSONModel";
+import ODataModel from "sap/ui/model/odata/v4/ODataModel";
+
+/** @namespace myapp.controller */
+export default class List extends Controller {
+  private _oViewModel!: JSONModel;
+  private _oDataModel!: ODataModel;
+
+  public onInit(): void {
+    this._oViewModel = new JSONModel({ busy: false });
+    this.getView()?.setModel(this._oViewModel, "view");
+  }
+
+  public onItemPress(): void {
+    // handle press event
+  }
+}</code></pre>
+          <div class="callout note">
+            <strong>The <code>@namespace</code> comment is mandatory.</strong> UI5 runtime uses it to identify the module. Always add it above the class declaration.
+          </div>
+
+          <h2>Controller Lifecycle Hooks</h2>
+          <table style="width:100%;max-width:72ch;border-collapse:collapse;font-size:0.9375rem;margin-bottom:1.5rem;">
+            <thead><tr style="border-bottom:2px solid var(--color-border);">
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Hook</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">When called</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Typical use</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><code>onInit()</code></td>
+                <td style="padding:8px 12px;">Once on first instantiation</td>
+                <td style="padding:8px 12px;">Initialize models, register event handlers</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><code>onBeforeRendering()</code></td>
+                <td style="padding:8px 12px;">Before each render</td>
+                <td style="padding:8px 12px;">Prepare data before display</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><code>onAfterRendering()</code></td>
+                <td style="padding:8px 12px;">After each render</td>
+                <td style="padding:8px 12px;">DOM manipulation (use sparingly)</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;"><code>onExit()</code></td>
+                <td style="padding:8px 12px;">Once on destroy</td>
+                <td style="padding:8px 12px;">Clean up event handlers, intervals</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>Naming Conventions (delaware standard)</h2>
+          <p>From <a href="https://delawareconsulting.atlassian.net/wiki/spaces/SAPDEV/pages/1262682171" target="_blank" rel="noopener">QA-003 UI5 Frontend Standards</a>:</p>
+          <ul>
+            <li>Event handlers: <code>on[Action][Control]</code> — e.g. <code>onExecutePress()</code>, <code>onMaterialSelectionChange()</code></li>
+            <li>Private methods: prefixed with <code>_</code> — e.g. <code>_initModels()</code>, <code>_openDialog()</code></li>
+            <li>Private members: prefixed with <code>_o</code> for objects — e.g. <code>_oViewModel</code>, <code>_oDataModel</code></li>
+          </ul>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <a href="mvc-pattern.html" class="nav-btn">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">MVC Pattern</span>
+          </a>
+          <a href="data-binding.html" class="nav-btn next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Data Binding</span>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

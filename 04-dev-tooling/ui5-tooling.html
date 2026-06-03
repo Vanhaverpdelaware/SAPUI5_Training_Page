@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — UI5 Tooling | delaware</title>
+  <meta name="description" content="Get started with UI5 Tooling — the build and development tool for SAPUI5 projects.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="ui5-tooling">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">Development &amp; Tooling</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>UI5 Tooling</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>UI5 Tooling</h1>
+          <p>UI5 Tooling is the official build and development chain for SAPUI5 applications. It provides a dev server, build pipeline, and an extensible middleware/task system.</p>
+
+          <h2>Installation</h2>
+          <pre><code>npm install --global @ui5/cli
+ui5 --version   # verify</code></pre>
+
+          <h2>Core commands</h2>
+          <table style="width:100%;max-width:72ch;border-collapse:collapse;font-size:0.9375rem;margin-bottom:1.5rem;">
+            <thead><tr style="border-bottom:2px solid var(--color-border);">
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Command</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">What it does</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><code>ui5 serve</code></td>
+                <td style="padding:8px 12px;">Start dev server at <code>localhost:8080</code>, hot-reload on save</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><code>ui5 serve --open index.html</code></td>
+                <td style="padding:8px 12px;">Same + auto-opens browser</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><code>ui5 build</code></td>
+                <td style="padding:8px 12px;">Production build → <code>dist/</code> folder</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;"><code>ui5 build --clean-dest</code></td>
+                <td style="padding:8px 12px;">Clean <code>dist/</code> before building</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;"><code>ui5 add sap.m</code></td>
+                <td style="padding:8px 12px;">Add a UI5 library to <code>ui5.yaml</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>ui5.yaml — project descriptor</h2>
+          <p>Every UI5 project has a <code>ui5.yaml</code> at the root. It defines the framework version, libraries, and tooling middleware:</p>
+          <pre><code>specVersion: "3.0"
+metadata:
+  name: myapp
+type: application
+framework:
+  name: SAPUI5
+  version: "1.120.0"
+  libraries:
+    - name: sap.m
+    - name: sap.ui.core
+    - name: sap.ui.layout
+builder:
+  customTasks:
+    - name: ui5-tooling-transpile-task
+      afterTask: replaceVersion
+server:
+  customMiddleware:
+    - name: ui5-tooling-transpile-middleware
+      afterMiddleware: compression
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        backend:
+          - path: /api
+            url: http://localhost:4004</code></pre>
+
+          <h2>Build output</h2>
+          <p>A <code>ui5 build</code> produces an optimized <code>dist/</code> folder containing:</p>
+          <ul>
+            <li><strong>Component-preload.js</strong> — all JS/TS bundled into one file for fast initial load</li>
+            <li>Processed <code>manifest.json</code></li>
+            <li>Minified CSS</li>
+            <li>All static assets (i18n, views, fragments)</li>
+          </ul>
+          <p>The <code>dist/</code> folder is what you deploy to BTP or a web server.</p>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <span></span>
+          <a href="bas-vs-vscode.html" class="nav-btn next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">BAS vs VS Code</span>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — OData Basics | delaware</title>
+  <meta name="description" content="Learn the fundamentals of OData services and how to consume them in SAPUI5 applications.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="odata-basics">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">SAPUI5 Basics</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>OData Basics</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>OData Basics</h1>
+          <p>OData (Open Data Protocol) is the standard API protocol for SAP backends. SAPUI5 has built-in OData V4 model support that handles fetching, caching, and updating data automatically.</p>
+
+          <h2>OData V4 vs V2</h2>
+          <table style="width:100%;max-width:72ch;border-collapse:collapse;font-size:0.9375rem;margin-bottom:1.5rem;">
+            <thead><tr style="border-bottom:2px solid var(--color-border);">
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Feature</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">V2</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">V4 (preferred)</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">JSON format</td>
+                <td style="padding:8px 12px;">Verbose with <code>d</code> wrapper</td>
+                <td style="padding:8px 12px;">Clean JSON</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">Batch requests</td>
+                <td style="padding:8px 12px;">Supported</td>
+                <td style="padding:8px 12px;">Supported + improved</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">Server-side pagination</td>
+                <td style="padding:8px 12px;">Manual</td>
+                <td style="padding:8px 12px;">Automatic</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;">SAP CAP support</td>
+                <td style="padding:8px 12px;">Limited</td>
+                <td style="padding:8px 12px;">Native</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>Configuring the OData Model in manifest.json</h2>
+          <p>Define the data source and model in <code>manifest.json</code> — UI5 creates the model automatically at startup:</p>
+          <pre><code>"sap.app": {
+  "dataSources": {
+    "mainService": {
+      "uri": "/api/order-creation/",
+      "type": "OData",
+      "settings": { "odataVersion": "4.0" }
+    }
+  }
+},
+"sap.ui5": {
+  "models": {
+    "": {
+      "dataSource": "mainService",
+      "type": "sap.ui.model.odata.v4.ODataModel",
+      "settings": {
+        "synchronizationMode": "None",
+        "operationMode": "Server",
+        "autoExpandSelect": true,
+        "earlyRequests": true
+      }
+    }
+  }
+}</code></pre>
+
+          <h2>Using the OData Model in a Controller</h2>
+          <pre><code>import ODataModel from "sap/ui/model/odata/v4/ODataModel";
+
+public onInit(): void {
+  // The default model ("") is set up via manifest.json
+  this._oDataModel = this.getView()?.getModel() as ODataModel;
+}
+
+// Bind a list to an entity set
+public onBeforeRendering(): void {
+  const oList = this.byId("productList") as List;
+  oList.bindItems({
+    path: "/Products",
+    parameters: { $top: 50, $orderby: "Name" }
+  });
+}</code></pre>
+
+          <div class="callout note">
+            <strong>Server-side model:</strong> OData models are server-side — only data explicitly requested is loaded into memory. This is why <code>autoExpandSelect: true</code> is important: it only fetches properties that are actually bound in your view.
+          </div>
+
+          <h2>Development Proxy (ui5.yaml)</h2>
+          <p>During local development, proxy your backend API through <code>fiori-tools-proxy</code> in <code>ui5.yaml</code> to avoid CORS issues:</p>
+          <pre><code>server:
+  customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        backend:
+          - path: /api
+            url: http://localhost:4004</code></pre>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <a href="data-binding.html" class="nav-btn">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">Data Binding</span>
+          </a>
+          <span></span>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

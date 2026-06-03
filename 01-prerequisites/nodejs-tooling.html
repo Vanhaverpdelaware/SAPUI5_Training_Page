@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — Node.js &amp; UI5 Tooling | delaware</title>
+  <meta name="description" content="Install and configure Node.js and UI5 Tooling as the foundation for SAPUI5 development.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="nodejs-tooling">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">Prerequisites</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>Node.js &amp; UI5 Tooling</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>Node.js &amp; UI5 Tooling</h1>
+          <h2>Node.js</h2>
+          <p>SAPUI5 Tooling requires <strong>Node.js 20.x LTS</strong>. Verify your installation:</p>
+          <pre><code>node --version   # Should output v20.x.x
+npm --version    # Should output 10.x.x or higher</code></pre>
+          <p>If not installed, download from the <strong>Company Portal</strong> or from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a> (choose the LTS version).</p>
+          <div class="callout warning">
+            <strong>Version matters:</strong> Node.js 21 is not supported by UI5 Tooling v4. Stick to v20 LTS or v22 LTS.
+          </div>
+
+          <h2>UI5 CLI</h2>
+          <p>Install the UI5 Tooling CLI globally — this is the main tool for serving and building UI5 apps:</p>
+          <pre><code>npm install --global @ui5/cli</code></pre>
+          <p>Verify the installation:</p>
+          <pre><code>ui5 --version</code></pre>
+
+          <h2>easy-ui5 Generator</h2>
+          <p>The <code>easy-ui5</code> generator scaffolds new SAPUI5 projects in seconds. Install it once globally:</p>
+          <pre><code>npm install -g yo generator-easy-ui5</code></pre>
+          <p>Create a new TypeScript UI5 project:</p>
+          <pre><code>yo easy-ui5 project</code></pre>
+          <p>Follow the prompts. Select <strong>TypeScript</strong> when asked for the project type.</p>
+
+          <h2>Git</h2>
+          <p>Git 2.x+ is required. Verify:</p>
+          <pre><code>git --version</code></pre>
+          <p>Configure your identity if not already done:</p>
+          <pre><code>git config --global user.name "Your Name"
+git config --global user.email "your.name@delaware.pro"</code></pre>
+
+          <h2>CF CLI (for BTP deployment)</h2>
+          <p>Required for deploying to SAP BTP Cloud Foundry. Install CF CLI 8.x+:</p>
+          <pre><code>cf --version   # verify after install</code></pre>
+          <p>Download from the <a href="https://github.com/cloudfoundry/cli/releases" target="_blank" rel="noopener">CF CLI GitHub releases page</a>.</p>
+
+          <div class="callout tip">
+            <strong>Quick checklist:</strong> Run all four version commands above. If all output a version number, you are ready to start.
+          </div>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <a href="ide-setup.html" class="nav-btn">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">IDE Setup</span>
+          </a>
+          <a href="system-access.html" class="nav-btn next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">System Access</span>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

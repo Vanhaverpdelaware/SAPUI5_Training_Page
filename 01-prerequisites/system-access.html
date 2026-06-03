@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — System Access | delaware</title>
+  <meta name="description" content="Configure system access, accounts, and permissions required for SAPUI5 development and deployment.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="system-access">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">Prerequisites</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>System Access</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>System Access</h1>
+          <h2>SAP BTP Subaccount</h2>
+          <p>For BTP-connected development you need access to a BTP subaccount. Contact your project lead or SAP basis team to get:</p>
+          <ul>
+            <li>DEV space access in the relevant Cloud Foundry org</li>
+            <li>S/4HANA sandbox credentials for API testing</li>
+            <li>Destination Service configuration rights</li>
+          </ul>
+          <p>Verify your CF login works:</p>
+          <pre><code>cf login -a https://api.cf.eu10.hana.ondemand.com
+# Enter your SAP BTP email + password when prompted
+cf target   # Should show your org and space</code></pre>
+
+          <h2>SAP BTP Trial (Self-Study)</h2>
+          <p>For self-study and exercises without a project system, create a free BTP trial account:</p>
+          <ol style="color:var(--color-text-muted);font-size:1rem;line-height:1.75;max-width:72ch;padding-left:1.5rem;margin-bottom:1rem;">
+            <li>Go to <a href="https://www.sap.com/products/technology-platform/trial.html" target="_blank" rel="noopener">sap.com/trial</a></li>
+            <li>Register with your business email</li>
+            <li>Choose the <strong>US East (VA)</strong> or <strong>Europe (Frankfurt)</strong> region</li>
+            <li>Activate the <strong>Business Application Studio</strong> service</li>
+          </ol>
+          <div class="callout note">
+            <strong>Trial limitations:</strong> Trial accounts expire after 90 days of inactivity and have limited resources. Use your project subaccount for real work.
+          </div>
+
+          <h2>delaware Internal Systems</h2>
+          <p>For delaware project work you typically need access to:</p>
+          <table style="width:100%;max-width:72ch;border-collapse:collapse;font-size:0.9375rem;margin-bottom:1.5rem;">
+            <thead><tr style="border-bottom:2px solid var(--color-border);">
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Resource</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">How to get access</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">BTP Subaccount</td>
+                <td style="padding:8px 12px;">Request from project lead</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">S/4HANA Sandbox</td>
+                <td style="padding:8px 12px;">Request from SAP basis team</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">Internal GitLab / Azure DevOps</td>
+                <td style="padding:8px 12px;">IT helpdesk request</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;">Confluence (SAPDEV space)</td>
+                <td style="padding:8px 12px;">Auto-provisioned with Atlassian account</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="callout tip">
+            <strong>Tip:</strong> The <a href="https://delawareconsulting.atlassian.net/wiki/spaces/SAPDEV" target="_blank" rel="noopener">SAPDEV Confluence space</a> contains project-specific technical documentation including standards, ADRs, and setup guides.
+          </div>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <a href="nodejs-tooling.html" class="nav-btn">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">Node.js &amp; UI5 Tooling</span>
+          </a>
+          <span></span>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

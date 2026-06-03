@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — Types &amp; Classes | delaware</title>
+  <meta name="description" content="Learn how to use TypeScript types and ES6 class syntax when building SAPUI5 controllers and models.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="types-and-classes">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">TypeScript in UI5</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>Types &amp; Classes</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>Types &amp; Classes</h1>
+          <p>With <code>@sapui5/ts-types-esm</code> installed, VS Code gives you full autocompletion and type checking for all UI5 controls and APIs.</p>
+
+          <h2>Importing UI5 Modules</h2>
+          <p>Use ES module imports — <code>ui5-tooling-transpile</code> converts these to <code>sap.ui.define()</code> at build time:</p>
+          <pre><code>import Controller from "sap/ui/core/mvc/Controller";
+import JSONModel from "sap/ui/model/json/JSONModel";
+import MessageBox from "sap/m/MessageBox";
+import MessageToast from "sap/m/MessageToast";
+import Button from "sap/m/Button";
+import Event from "sap/ui/base/Event";</code></pre>
+
+          <h2>TypeScript Controller Pattern</h2>
+          <p>The standard controller pattern at delaware (from <a href="https://delawareconsulting.atlassian.net/wiki/spaces/SAPDEV/pages/1262682171" target="_blank" rel="noopener">QA-003</a>):</p>
+          <pre><code>import Controller from "sap/ui/core/mvc/Controller";
+import JSONModel from "sap/ui/model/json/JSONModel";
+import ODataModel from "sap/ui/model/odata/v4/ODataModel";
+import Event from "sap/ui/base/Event";
+
+/** @namespace myapp.controller */
+export default class Selection extends Controller {
+  private _oViewModel!: JSONModel;
+  private _oDataModel!: ODataModel;
+
+  public onInit(): void {
+    this._oViewModel = new JSONModel({
+      plant: "",
+      isValid: false,
+      busy: false
+    });
+    this.getView()?.setModel(this._oViewModel, "view");
+    this._oDataModel = this.getView()?.getModel() as ODataModel;
+  }
+
+  public onExecutePress(): void {
+    this._executeAnalysis();
+  }
+
+  public onPlantChange(oEvent: Event): void {
+    const sValue = (oEvent.getParameter("value") as string).trim();
+    this._oViewModel.setProperty("/plant", sValue);
+    this._oViewModel.setProperty("/isValid", sValue.length === 4);
+  }
+
+  private _executeAnalysis(): void {
+    if (!this._oViewModel.getProperty("/isValid") as boolean) {
+      MessageBox.error("Plant is required");
+      return;
+    }
+    this._oViewModel.setProperty("/busy", true);
+    // ... call OData service
+  }
+}</code></pre>
+
+          <h2>TypeScript Classes for Reusable Logic</h2>
+          <p>Extract reusable logic into separate TypeScript classes — do not put everything in controllers. Example from the <a href="https://delawareconsulting.atlassian.net/wiki/spaces/SAPDEV/pages/131239864" target="_blank" rel="noopener">delaware class-based development guide</a>:</p>
+          <pre><code>import JSONModel from "sap/ui/model/json/JSONModel";
+
+type WorkcenterType = { id: string; name: string; };
+
+export default class WorkcenterService {
+  private model: JSONModel;
+
+  constructor(model: JSONModel) {
+    super();
+    this.model = model;
+  }
+
+  set workcenters(data: WorkcenterType[]) {
+    this.model.setProperty("/Workcenters", data);
+  }
+
+  get workcenters(): WorkcenterType[] {
+    return this.model.getProperty("/Workcenters") as WorkcenterType[];
+  }
+}</code></pre>
+          <p>Then use it in your controller:</p>
+          <pre><code>import WorkcenterService from "../model/WorkcenterService";
+
+private _service!: WorkcenterService;
+
+public onInit(): void {
+  const oModel = new JSONModel();
+  this.getView()?.setModel(oModel);
+  this._service = new WorkcenterService(oModel);
+}</code></pre>
+
+          <h2>Error Handling with Types</h2>
+          <pre><code>import MessageBox from "sap/m/MessageBox";
+import MessageToast from "sap/m/MessageToast";
+
+private _showError(sMessage: string): void {
+  MessageBox.error(sMessage, {
+    title: this._getText("errorTitle")
+  });
+}
+
+private _showSuccess(sMessage: string): void {
+  MessageToast.show(sMessage);
+}
+
+private _getText(sKey: string): string {
+  const oBundle = this.getView()
+    ?.getModel("i18n")
+    ?.getResourceBundle() as ResourceBundle;
+  return oBundle?.getText(sKey) ?? sKey;
+}</code></pre>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <a href="ts-setup.html" class="nav-btn">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">TypeScript Setup</span>
+          </a>
+          <a href="strict-mode.html" class="nav-btn next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Strict Mode</span>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

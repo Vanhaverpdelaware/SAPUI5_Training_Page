@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — IDE Setup | delaware</title>
+  <meta name="description" content="Set up your IDE for SAPUI5 and TypeScript development with VS Code or SAP Business Application Studio.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="ide-setup">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">Prerequisites</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>IDE Setup</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>IDE Setup</h1>
+          <h2>VS Code (Recommended)</h2>
+          <p>VS Code is the recommended IDE for SAPUI5/TypeScript development at delaware. Install it from the <strong>Company Portal</strong> on your Windows machine.</p>
+          <ol style="color:var(--color-text-muted);font-size:1rem;line-height:1.75;max-width:72ch;padding-left:1.5rem;margin-bottom:1rem;">
+            <li>Open the <strong>Company Portal</strong> app (search in Start menu)</li>
+            <li>Search for <strong>Visual Studio Code</strong></li>
+            <li>Click <strong>Install</strong></li>
+          </ol>
+
+          <h2>Required VS Code Extensions</h2>
+          <p>Install these extensions from the VS Code Extensions panel (<code>Ctrl+Shift+X</code>):</p>
+          <table style="width:100%;max-width:72ch;border-collapse:collapse;font-size:0.9375rem;margin-bottom:1.5rem;">
+            <thead><tr style="border-bottom:2px solid var(--color-border);">
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Extension</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">ID</th>
+              <th style="text-align:left;padding:8px 12px;color:var(--color-dark);">Purpose</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">SAP Fiori Tools</td>
+                <td style="padding:8px 12px;"><code>sapse.sap-ux-fiori-tools-extension-pack</code></td>
+                <td style="padding:8px 12px;">UI5 development, scaffolding</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">TypeScript Next</td>
+                <td style="padding:8px 12px;"><code>ms-vscode.vscode-typescript-next</code></td>
+                <td style="padding:8px 12px;">TypeScript support</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">ESLint</td>
+                <td style="padding:8px 12px;"><code>dbaeumer.vscode-eslint</code></td>
+                <td style="padding:8px 12px;">Code linting</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:8px 12px;">Prettier</td>
+                <td style="padding:8px 12px;"><code>esbenp.prettier-vscode</code></td>
+                <td style="padding:8px 12px;">Code formatting</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;">XML Tools</td>
+                <td style="padding:8px 12px;"><code>DotJoshJohnson.xml</code></td>
+                <td style="padding:8px 12px;">XML view formatting</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>SAP Business Application Studio (BAS)</h2>
+          <p>BAS is SAP's cloud IDE — an alternative to VS Code that comes pre-configured with all SAP tooling. No local installation needed, but requires a BTP subaccount.</p>
+          <div class="callout note">
+            <strong>When to use BAS:</strong> Prefer BAS for BTP-connected projects or when working without a local development machine. Use VS Code locally for faster iteration and offline work.
+          </div>
+
+          <h2>Recommended VS Code Settings</h2>
+          <p>Add this to your project's <code>.vscode/settings.json</code>:</p>
+          <pre><code>{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
+}</code></pre>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <span></span>
+          <a href="nodejs-tooling.html" class="nav-btn next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Node.js &amp; UI5 Tooling</span>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>

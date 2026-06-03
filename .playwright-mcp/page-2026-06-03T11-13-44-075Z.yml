@@ -1,0 +1,39 @@
+- generic [active] [ref=e1]:
+  - complementary [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]: SAPUI5 Training
+      - group [ref=e5]:
+        - generic "01 Prerequisites ›" [ref=e6] [cursor=pointer]:
+          - text: 01 Prerequisites
+          - generic [ref=e7]: ›
+      - group [ref=e8]:
+        - generic "02 SAPUI5 Basics ›" [ref=e9] [cursor=pointer]:
+          - text: 02 SAPUI5 Basics
+          - generic [ref=e10]: ›
+        - link "MVC Pattern" [ref=e11] [cursor=pointer]:
+          - /url: ./02-sapui5-basics/mvc-pattern.html
+        - link "Views & Controllers" [ref=e12] [cursor=pointer]:
+          - /url: ./02-sapui5-basics/views-controllers.html
+        - link "Data Binding" [ref=e13] [cursor=pointer]:
+          - /url: ./02-sapui5-basics/data-binding.html
+        - link "OData Basics" [ref=e14] [cursor=pointer]:
+          - /url: ./02-sapui5-basics/odata-basics.html
+      - group [ref=e15]:
+        - generic "03 TypeScript in UI5 ›" [ref=e16] [cursor=pointer]:
+          - text: 03 TypeScript in UI5
+          - generic [ref=e17]: ›
+      - group [ref=e18]:
+        - generic "04 Dev & Tooling ›" [ref=e19] [cursor=pointer]:
+          - text: 04 Dev & Tooling
+          - generic [ref=e20]: ›
+      - group [ref=e21]:
+        - generic "05 Exercises ›" [ref=e22] [cursor=pointer]:
+          - text: 05 Exercises
+          - generic [ref=e23]: ›
+      - generic [ref=e24]: SAPUI5 & TypeScript Training v1.0
+  - main [ref=e25]:
+    - paragraph [ref=e26]:
+      - text: "Active page:"
+      - strong [ref=e27]: mvc-pattern
+      - text: (should be highlighted in sidebar)
+    - paragraph [ref=e28]: Chapter "02 SAPUI5 Basics" should be open, others closed.

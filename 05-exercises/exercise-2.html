@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPUI5 Training — Exercise 2 | delaware</title>
+  <meta name="description" content="Hands-on exercise 2: implement data binding and connect an OData service to a SAPUI5 view.">
+  <meta name="keywords" content="SAPUI5, OpenUI5, TypeScript, SAP Fiori, UI5 Tooling, SAP BTP, MVC, data binding, OData, delaware">
+  <meta name="author" content="delaware">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-root="../" data-page="exercise-2">
+  <header class="site-header">
+    <a href="../index.html" class="badge" style="text-decoration:none;">UI5</a>
+    <span class="site-title">SAPUI5 &amp; TypeScript Training</span>
+    <div class="header-spacer"></div>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#chapters">Chapters</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Chapter navigation"><div id="nav-mount"></div></aside>
+    <main class="main">
+      <div class="content-page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">SAPUI5 Training</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="index.html">Exercises</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <strong>Exercise 2</strong>
+        </nav>
+        <div class="author-block">
+          <div class="author-avatar" aria-hidden="true">👤</div>
+          <div class="author-info">
+            <strong>delaware Training Team</strong>
+            <span>Consultant — delaware</span>
+          </div>
+        </div>
+        <article class="content-body">
+          <h1>Exercise 2</h1>
+          <p>Building on Exercise 1, you add routing so clicking a list item navigates to a detail view — the standard Fiori master-detail pattern.</p>
+
+          <div class="callout note">
+            <strong>Prerequisites:</strong> Complete <a href="exercise-1.html">Exercise 1</a> before starting.
+          </div>
+
+          <h2>Goal</h2>
+          <p>Add a second view and configure routing so that clicking an item in the list navigates to a detail page showing that item's data.</p>
+
+          <h2>Step 1 — Create the Detail view</h2>
+          <p>Create <code>webapp/view/Detail.view.xml</code>:</p>
+          <pre><code>&lt;mvc:View controllerName="ui5.training.controller.Detail"
+  xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"&gt;
+  &lt;Page
+    title="{name}"
+    showNavButton="true"
+    navButtonPress=".onNavBack"&gt;
+    &lt;content&gt;
+      &lt;VBox class="sapUiMediumMargin"&gt;
+        &lt;Label text="Material ID" /&gt;
+        &lt;Text text="{id}" /&gt;
+        &lt;Label text="Name" class="sapUiSmallMarginTop" /&gt;
+        &lt;Text text="{name}" /&gt;
+        &lt;Label text="Quantity" class="sapUiSmallMarginTop" /&gt;
+        &lt;Text text="{quantity}" /&gt;
+      &lt;/VBox&gt;
+    &lt;/content&gt;
+  &lt;/Page&gt;
+&lt;/mvc:View&gt;</code></pre>
+
+          <h2>Step 2 — Create the Detail controller</h2>
+          <p>Create <code>webapp/controller/Detail.controller.ts</code>:</p>
+          <pre><code>import Controller from "sap/ui/core/mvc/Controller";
+import { History } from "sap/ui/core/routing/History";
+
+/** @namespace ui5.training.controller */
+export default class Detail extends Controller {
+  public onNavBack(): void {
+    const oHistory = History.getInstance();
+    const sPreviousHash = oHistory.getPreviousHash();
+
+    if (sPreviousHash !== undefined) {
+      window.history.go(-1);
+    } else {
+      this.getOwnerComponent()?.getRouter()
+        .navTo("main", {}, true);
+    }
+  }
+}</code></pre>
+
+          <h2>Step 3 — Configure routing in manifest.json</h2>
+          <p>Add routes and targets to <code>sap.ui5.routing</code> in <code>manifest.json</code>:</p>
+          <pre><code>"routing": {
+  "config": {
+    "routerClass": "sap.m.routing.Router",
+    "viewType": "XML",
+    "viewPath": "ui5.training.view",
+    "controlId": "app",
+    "controlAggregation": "pages",
+    "async": true
+  },
+  "routes": [
+    { "name": "main",   "pattern": "",           "target": "main" },
+    { "name": "detail", "pattern": "detail/{id}", "target": "detail" }
+  ],
+  "targets": {
+    "main":   { "viewName": "Main",   "viewLevel": 1 },
+    "detail": { "viewName": "Detail", "viewLevel": 2 }
+  }
+}</code></pre>
+
+          <h2>Step 4 — Navigate on item press</h2>
+          <p>In <code>Main.view.xml</code>, add a press handler to each list item:</p>
+          <pre><code>&lt;StandardListItem
+  title="{name}"
+  description="Qty: {quantity}"
+  type="Navigation"
+  press=".onItemPress" /&gt;</code></pre>
+          <p>In <code>Main.controller.ts</code>, add the handler:</p>
+          <pre><code>import Event from "sap/ui/base/Event";
+import ListItem from "sap/m/ListItemBase";
+
+public onItemPress(oEvent: Event): void {
+  const oItem = oEvent.getSource() as ListItem;
+  const oCtx = oItem.getBindingContext();
+  const sId = oCtx?.getProperty("id") as string;
+
+  this.getOwnerComponent()?.getRouter()
+    .navTo("detail", { id: sId });
+}</code></pre>
+
+          <h2>Step 5 — Bind data in Detail controller</h2>
+          <p>In <code>Detail.controller.ts</code>, read the route parameter and bind the view:</p>
+          <pre><code>public onInit(): void {
+  const oRouter = this.getOwnerComponent()?.getRouter();
+  oRouter?.getRoute("detail")?.attachPatternMatched(
+    this._onRouteMatched.bind(this)
+  );
+}
+
+private _onRouteMatched(oEvent: Event): void {
+  const sId = oEvent.getParameter("arguments").id as string;
+  const oModel = this.getOwnerComponent()?.getModel() as JSONModel;
+  const aItems = oModel.getProperty("/items") as Array&lt;{id:string}&gt;;
+  const iIndex = aItems.findIndex(i =&gt; i.id === sId);
+
+  this.getView()?.bindElement(`/items/${iIndex}`);
+}</code></pre>
+
+          <p>Test by clicking an item in the list — the detail view should show the item data and the back button should return to the list.</p>
+
+          <div class="callout tip">
+            <strong>Done!</strong> You have implemented the Fiori master-detail navigation pattern. Continue to Exercise 3 to connect to a real OData service.
+          </div>
+        </article>
+        <nav class="prev-next" aria-label="Page navigation">
+          <a href="exercise-1.html" class="nav-btn">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">Exercise 1</span>
+          </a>
+          <a href="exercise-3.html" class="nav-btn next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Exercise 3</span>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <footer class="site-footer">SAPUI5 &amp; TypeScript Training v1.0 — delaware</footer>
+  <script src="../nav.js"></script>
+</body>
+</html>
